@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\BaseController;
 use App\Modules\Seo\Http\Requests\SeoFormRequest;
-use Illuminate\Http\Request;
 
 class SeoController extends BaseController {
 
@@ -45,7 +44,7 @@ class SeoController extends BaseController {
 		$data['user_id']   = \Auth::user()->id;
 		$data['item_type'] = $itemType;
 		$data['item_id']   = $item_id;
-		\CMS::seo()->saveSeo(array_merge($request->except('user_id', 'item_id', 'item_type'), $data), $itemType, $item_id);
+		\CMS::seo()->saveSeo(array_merge($request->all(), $data), $itemType, $item_id);
 
 		return redirect()->back()->with('message', 'SEO successfully added');
 	}		
