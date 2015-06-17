@@ -1,0 +1,10 @@
+{
+	"name": "Seo",
+	"slug": "seo",
+	"version": "1.0",
+	"description": "This is the description for the Seo module.",
+	"repo_link": "https:\/\/github.com\/amgadmetri\/SeoModule.git",
+	"type" : "plugin",
+	"enabled": true,
+	"module_parts": ["Seos"]
+}
