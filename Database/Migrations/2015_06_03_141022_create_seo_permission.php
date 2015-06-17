@@ -14,7 +14,7 @@ class CreateSeoPermission extends Migration
 	{
 		foreach (\CMS::coreModuleParts()->getModuleParts('seo') as $modulePart) 
 		{
-			if ($modulePart->part_key == 'Seo') 
+			if ($modulePart->part_key == 'Seos') 
 			{
 				\CMS::permissions()->insertDefaultItemPermissions(
 				                 $modulePart->part_key, 
