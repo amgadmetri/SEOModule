@@ -12,7 +12,7 @@ class SeoController extends BaseController {
 	 * @var permissions
 	 */
 	protected $permissions = [
-	'getShow'      => 'show', 
+	'getShow' => 'show', 
 	];
 
 	/**
@@ -20,7 +20,7 @@ class SeoController extends BaseController {
 	 */
 	public function __construct()
 	{
-		parent::__construct('Seo');
+		parent::__construct('Seos');
 	}
 
 	/**
@@ -30,20 +30,8 @@ class SeoController extends BaseController {
  	 */
 	public function getShow($itemType, $item_id)
 	{
-		$seos =\CMS::seo()->getAllSeo($itemType, $item_id);
-		return view('seo::seo.seo', compact('seos','itemType','item_id'));
-	}
-
-
-	/**
-	 * Show the form for creating a new Seo.
-	 * 
-	 * @return Response
-	 */
-	
-	public function getCreate($itemType, $item_id)
-	{
-		return view('seo::seo.createseo', compact('itemType','item_id'));
+		$seo = \CMS::seo()->getSeo($itemType, $item_id);
+		return view('seo::seo.saveseo', compact('seo','itemType','item_id'));
 	}
 
 	/**
@@ -52,68 +40,13 @@ class SeoController extends BaseController {
 	 * @param  SeoFormRequest  $request
 	 * @return Response
 	 */
-	public function postCreate(SeoFormRequest $request, $itemType, $item_id)
+	public function postShow(SeoFormRequest $request, $itemType, $item_id)
 	{
-		$data['user_id']      = \Auth::user()->id;
-		$data['item_type']    = $itemType;
-		$data['item_id']      = $item_id;
-		\CMS::seo()->create(array_merge($request->except('user_id', 'item_id', 'item_type'), $data));
+		$data['user_id']   = \Auth::user()->id;
+		$data['item_type'] = $itemType;
+		$data['item_id']   = $item_id;
+		\CMS::seo()->saveSeo(array_merge($request->except('user_id', 'item_id', 'item_type'), $data), $itemType, $item_id);
 
 		return redirect()->back()->with('message', 'SEO successfully added');
-	}
-
-	/**
-	 * Show the form for editing the specified SEO.
-	 * 
-	 * @param  integer $id
-	 * @return Response
-	 */
-	public function getEdit($id)
-	{
-		$seodata   = \CMS::seo()->find($id);
-		return view('seo::seo.editseo', compact('seodata'));
-	}
-
-	/**
-	 * Update the specified SEO in storage.
-	 * 
-	 * @param  integer         $id
-	 * @param  SeoFormRequest  $request
-	 * @return Response
-	 */
-	public function postEdit(SeoFormRequest $request, $id)
-	{
-		$data['user_id']      = \Auth::user()->id;
-		$data['item_type']    = "content";
-		$data['item_id']      = 2;	
-		\CMS::seo()->update($id, array_merge($request->except('user_id', 'item_id', 'item_type'), $data));
-
-		return redirect()->back()->with('message', 'SEO successfully updated');
-	}
-
-	/**
-	 * Remove the specified SEO from storage.
-	 * 
-	 * @param  integer  $id
-	 * @return Response
-	 */
-	public function getDelete($id)
-	{
-		\CMS::seo()->delete($id);
-		return redirect()->back()->with('message', 'SEO Deleted succssefully');
-	}
-	
-	/**
-	 * Show the form for editing the specified SEO.
-	 * 
-	 * @param  integer $id
-	 * @return Response
-	 */
-	public function getSeoshow($id)
-	{
-		$seodata   = \CMS::seo()->find($id);
-		return view('seo::seo.viewseo', compact('seodata'));
-	}
-
-	
+	}		
 }

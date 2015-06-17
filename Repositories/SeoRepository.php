@@ -21,54 +21,65 @@ class SeoRepository extends AbstractRepository
 	 */
 	protected function getRelations()
 	{
-		return ['seo'];
+		return [];
 	}
 	
 	/**
-	 * Return All SEO belongs to specific
+	 * Return SEO belongs to specific
 	 * item type.
 	 * 
 	 * @param  string  $itemType
 	 * @param  integer $itemId
 	 * @return collection
 	 */
-	public function getAllSeo($itemType, $itemId)
+	public function getSeo($itemType, $itemId, $language = false)
 	{
-		return  $this->model->with($this->getRelations())->
+		$seo = $this->model->with($this->getRelations())->
 		                     whereRaw('item_id=? and item_type=?', [$itemId, $itemType])->
-		                     get();
+		                     first();
+		if ( ! $seo) return false;
+
+		return $this->getSeoTranslations($seo, $language);
 	}
 
 	/**
-	 * Return the SEO  based on the given item type
+	 * Return the seo translated data based on the 
+	 * given language.
 	 * 
-	 * @param  string $itemType
-	 * @return string
+	 * @param  object $obj
+	 * @param  string $language
+	 * @return object 
 	 */
-	
-	public function renderSeoByType($itemType)
+	public function getSeoTranslations($obj, $language)
 	{
-		$seo         = $this->first('item_type',$itemType);
-		$html        = '';
-		$defaultPath ="seo::seo.seohtml";
-		$html       .= view($defaultPath, compact('seo'))->render();
-		return $html;
+		$obj->data = \CMS::languageContents()->getTranslations($obj->id, 'seo', $language);
+		return $obj;
 	}
-
+	
 	/**
-	 * Return the SEO  based on the given item id
+	 * Create or update the given seo
+	 * for specified item type and item id.
 	 * 
-	 * @param  string $itemType
-	 * @return string
+	 * @param  array   $data
+	 * @param  string  $itemType    The name of the item belongs to
+	 *                              the seo. 
+	 *                              ex: 'user', 'content' ....
+	 * @param  integer $itemId      The id of the item belongs to
+	 *                              the seo.
+	 *                              ex: 'user', 'content' ....
+	 * @return void
 	 */
-	
-	public function renderSeoById($id)
+	public function saveSeo($data, $itemType, $itemId)
 	{
-		$seo         = $this->find($id);
-		$html        = '';
-		$defaultPath ="seo::seo.seohtml";
-		$html       .= view($defaultPath, compact('seo'))->render();
-		return $html;
-	}
+		$seo          = $this->model->firstOrNew(['item_type' => $itemType, 'item_id' => $itemId]);
+		$seo->user_id = $data['user_id'];
+		$seo->save();
 
+		\CMS::languageContents()->insertLanguageContent([
+				'title'       => $data['title'],
+				'keywords'    => $data['keywords'],
+				'author'      => $data['author'],
+				'description' => $data['description'],
+				], 'seo', $seo->id);
+	}
 }

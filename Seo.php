@@ -16,29 +16,5 @@ class Seo extends Model {
 	 * 
 	 * @var fillable
 	 */
-	protected $fillable = ['title', 'keywords', 'description', 'author', 'item_type', 'item_id', 'user_id'];
-
-	/**
-	 * Get the SEO.
-	 * 
-	 * @return object
-	 */
-	public function seo()
-	{
-		return $this->belongsTo('App\Modules\Seo\Seo', 'item_id');
-	}
-
-	public static function boot()
-	{
-		parent::boot();
-
-		/**
-		 * Remove the SEO related to 
-		 * the deleted item type.
-		 */
-		Seo::deleting(function($seo)
-		{
-			$seo->seo()->delete();
-		});
-	}
+	protected $fillable = ['item_type', 'item_id', 'user_id'];
 }

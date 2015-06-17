@@ -14,6 +14,6 @@
 Route::group(['prefix' => 'admin/seo'], function() {
 	
 	Route::controllers([
-		'/'          => 'SeoController'
+		'/' => 'SeoController'
 		]);
 });

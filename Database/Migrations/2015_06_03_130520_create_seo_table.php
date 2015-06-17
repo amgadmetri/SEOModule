@@ -16,10 +16,6 @@ class CreateSeoTable extends Migration
 		{
 			Schema::create('seo', function(Blueprint $table) {
 				$table->bigIncrements('id');
-				$table->string('title', 70)->index();
-				$table->string('keywords', 255)->index();
-				$table->string('description', 160)->index();
-				$table->string('author', 70)->index();	
 				$table->string('item_type', 255)->index();
 				$table->bigInteger('item_id')->unsigned();
 				$table->bigInteger('user_id')->unsigned();

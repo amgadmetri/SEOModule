@@ -21,8 +21,14 @@
       </ul>
     </div>
     @endif
-    
-
+            @if(\CMS::permissions()->can('show', 'LanguageContents') && $seo)
+              <a 
+              class ="btn btn-default" 
+              href  ='{{ url("admin/language/languagecontents/show/seo/$seo->id") }}'
+              role  ="button">
+              Translations
+              </a> 
+            @endif
     <form method="post" id="seo_form">  
       <input name="_token" type="hidden" value="{{ csrf_token() }}">
 
@@ -32,7 +38,11 @@
         type             ="text" 
         class            ="form-control" 
         name             ="title" 
-        value            ="{{ $seodata->title }}" 
+        @if($seo)
+          value = "{{ $seo->data['title']  }}"
+        @else
+          value = "{{ old('title') }}"
+        @endif
         placeholder      ="SEO title..." 
         aria-describedby ="sizing-addon2"
         >
@@ -44,7 +54,11 @@
         type             ="text" 
         class            ="form-control" 
         name             ="keywords" 
-        value            ="{{ $seodata->keywords }}" 
+        @if($seo)
+          value = "{{ $seo->data['keywords']  }}"
+        @else
+          value = "{{ old('keywords') }}"
+        @endif
         placeholder      ="SEO keywords .." 
         aria-describedby ="sizing-addon2"
         >
@@ -55,8 +69,12 @@
         <input 
         type             ="text" 
         class            ="form-control" 
-        name             ="author" 
-        value            ="{{ $seodata->author }}" 
+        name             ="author"  
+        @if($seo)
+          value = "{{ $seo->data['author']  }}"
+        @else
+          value = "{{ old('author') }}"
+        @endif
         placeholder      ="Add author here .." 
         aria-describedby ="sizing-addon2"
         >
@@ -68,15 +86,19 @@
         type             ="text" 
         class            ="form-control" 
         name             ="description" 
-        value            ="{{ $seodata->description }}" 
+        @if($seo)
+          value = "{{ $seo->data['description']  }}"
+        @else
+          value = "{{ old('description') }}"
+        @endif
         placeholder      ="SEO Description .." 
         aria-describedby ="sizing-addon2"
         >
       </div>
 
-      <button type="submit" class="btn btn-primary form-control">update SEO</button>
+      <button type="submit" class="btn btn-primary form-control">Save SEO</button>
     </form>
-</div>  
+  </div>  
 </div>
 
 @stop
