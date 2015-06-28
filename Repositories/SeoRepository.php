@@ -1,6 +1,6 @@
 <?php namespace App\Modules\Seo\Repositories;
 
-use App\AbstractRepositories\AbstractRepository;
+use App\Modules\Core\AbstractRepositories\AbstractRepository;
 
 class SeoRepository extends AbstractRepository
 {

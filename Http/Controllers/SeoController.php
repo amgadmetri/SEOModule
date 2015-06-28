@@ -1,6 +1,6 @@
 <?php namespace App\Modules\Seo\Http\Controllers;
 
-use App\Http\Controllers\BaseController;
+use App\Modules\Core\Http\Controllers\BaseController;
 use App\Modules\Seo\Http\Requests\SeoFormRequest;
 
 class SeoController extends BaseController {
